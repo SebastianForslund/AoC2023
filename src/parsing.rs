@@ -21,25 +21,39 @@ pub fn get_number_at(str: &String, index: usize) -> Option<u32> {
         return None;
     }
 
-    if !str.chars().nth(index).unwrap().is_digit(10) {
+    if !str.chars().nth(index)?.is_digit(10) {
         return None;
     }
 
     while lower_bound > 0 {
-        if str.chars().nth(lower_bound - 1).unwrap().is_digit(10) {
-            lower_bound -= 1;
-        } else {
-            break;
+        match str.chars().nth(lower_bound - 1) {
+            Some(x) => {
+                if x.is_digit(10) {
+                    lower_bound -= 1;
+                } else {
+                    break;
+                }
+            }
+            None => break,
         }
     }
 
     while upper_bound < str.len() {
-        if str.chars().nth(upper_bound + 1).unwrap().is_digit(10) {
-            upper_bound += 1;
-        } else {
-            break;
+        match str.chars().nth(upper_bound + 1) {
+            Some(x) => {
+                if x.is_digit(10) {
+                    upper_bound += 1;
+                } else {
+                    break;
+                }
+            }
+            None => break,
         }
     }
 
-    return Some(str[lower_bound..=upper_bound].parse().unwrap());
+    return Some(
+        str[lower_bound..=upper_bound]
+            .parse()
+            .expect("parsing failed"),
+    );
 }
